@@ -15,9 +15,13 @@ const { cart, addToCart } = useCart()
   const productsPerPage = 6
 
   // Categorías dinámicas
-  const categories = useMemo(() => {
-    return ["Todos", ...new Set(productos.map((p: any) => p.categoria))]
-  }, [productos])
+  const categories = useMemo<string[]>(() => {
+  return [
+    "Todos",
+    ...Array.from(new Set(productos.map((p: any) => p.categoria)))
+  ]
+}, [productos])
+
 
   // Filtrado
   const filteredProducts = useMemo(() => {
