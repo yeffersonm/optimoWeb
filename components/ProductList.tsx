@@ -213,7 +213,8 @@ const { cart, addToCart } = useCart()
                           id: producto.id,
                           name: producto.nombre,
                           price: producto.precio,
-                          image: producto.imagen_url
+                          image: producto.imagen_url,
+                          quantity:1
                         })
                       }
                       style={styles.addBtn}
