@@ -1,16 +1,17 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { createClient } from "@supabase/supabase-js"
 import ChatClient from "@/components/ChatClient"
 import Link from "next/link"
+import { getSupabaseClient } from "@/lib/supabase"
 
 // Supabase
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabase = createClient(supabaseUrl, supabaseKey)
+//const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+//const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+//const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default function Home() {
+
   const [promotions, setPromotions] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -26,13 +27,22 @@ export default function Home() {
   }, [])
 
   // Productos desde Supabase
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data, error } = await supabase.from("productos").select("*").eq("activo", true).limit(3)
-      if (!error) setProducts(data || [])
-    }
-    fetchProducts()
-  }, [])
+ useEffect(() => {
+  const supabase = getSupabaseClient()
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("productos")
+      .select("*")
+      .eq("activo", true)
+      .limit(3)
+
+    if (!error) setProducts(data || [])
+  }
+
+  fetchProducts()
+}, [])
+
 
   // Autoplay carrusel
   useEffect(() => {
