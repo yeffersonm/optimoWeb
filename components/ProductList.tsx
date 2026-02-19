@@ -3,24 +3,36 @@
 import { useState, useMemo } from "react"
 import { useCart } from "@/context/CartContext"
 
-export default function ProductList({ productos }: any) {
+type Producto = {
+  id: number
+  nombre: string
+  precio: number
+  imagen_url: string
+  categoria: string
+  descripcion?: string
+}
+
+
+export default function ProductList({ productos }: { productos: Producto[] }) {
 const { cart, addToCart } = useCart()
 
   const [selectedCategory, setSelectedCategory] = useState("Todos")
   const [search, setSearch] = useState("")
   const [sortOrder, setSortOrder] = useState("default")
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedProduct, setSelectedProduct] = useState<any>(null)
+ const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null)
 
   const productsPerPage = 6
 
   // Categorías dinámicas
-  const categories = useMemo<string[]>(() => {
-  return [
-    "Todos",
-    ...Array.from(new Set(productos.map((p: any) => p.categoria)))
-  ]
+  const categories = useMemo(() => {
+  const uniqueCategories = Array.from(
+    new Set(productos.map((p) => p.categoria))
+  )
+
+  return ["Todos", ...uniqueCategories]
 }, [productos])
+
 
 
   // Filtrado
